@@ -41,6 +41,7 @@
                 topicField.width(topicWidth);
                 valueField.width(newWidth-topicWidth-70);
             }
+
             $("#node-input-topic-container").css('min-height','250px')
                     .css('min-width','450px').editableList({
                 addItem: function(container,i,opt) {
@@ -49,20 +50,21 @@
                     }
                     var topic = opt.t || {};
                     var row = $('<div/>',{class: "form-row"}).appendTo(container);
-                    var row2 = $('<div/>',{class: "form-row node-text-editor-row"}).appendTo(container);
+                    var row2 = $('<div/>',{class: "form-row"}).appendTo(container);
                     var row3 = $('<div/>',{class: "form-row node-text-editor-row"}).appendTo(container);
 
                     $('<label/>',{class:"node-input-topic-label"}).text("Topic").appendTo(row);
 
                     var topicField = $('<input/>',{style:"width:120px; margin-left: 5px;", class: 'node-input-topic-value'}).appendTo(row);
 
-                    $('<label/>',{class:"node-input-values-label"}).text("Values").appendTo(row2);
+                    $('<label/>',{class: "node-input-values-label"}).text("Values").appendTo(row2);
+                    var valuesDiv = $('<div/>', {class: "form-row node-input-topic-container-row"}).appendTo(row2);
+                    var valuesList = $("<ol/>").appendTo(valuesDiv);
 
-                    $("#node-input-values-container").css('min-height','50px')
-                        .css('min-width','400px').editableList({
+                    valuesList.css('min-height','50px').css('min-width','400px').editableList({
 
                         addItem: function(container, i , opt) {
-                            var row = $('<div/>').appendTo(container);
+                            var row = $('<div/>', {class: "form-row"}).appendTo(container);
 
                             $('<label/>',{class:"node-input-valueTypes-label"})
                                 .text("Name").appendTo(row);
@@ -152,12 +154,12 @@
             var node = this;
             node.topics = [];
             topics.each(function(i) {
-		var topicField = $(this).find(".node-input-topic-value");
+                var topicField = $(this).find(".node-input-topic-value");
                 var topic = topicField.val();
                 var t = {name: topic};
                 t.phrases = topicField[0].editor.getValue();
-		topicField[0].editor.destroy();
-		delete topicField[0].editor;
+                topicField[0].editor.destroy();
+                delete topicField[0].editor;
                 node.topics.push(t);
             });
         },
