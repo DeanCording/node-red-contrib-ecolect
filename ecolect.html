@@ -88,15 +88,18 @@
 
                         },
                         sortable: false,
-                        removable: true
+                        removable: true,
+                        header: "Name Type",
+                        height: "auto"
                     });
 
 
 
                     $('<label/>',{class:"node-input-phrases-label"}).text("Phrases").appendTo(row3);
 
-                    var phrasesEditor = $('<div/>',{style: 'height: 150px; min-height:50px;', class: 'node-text-editor',
-		    	id: 'node-input-phrases-editor-'+i}).appendTo(row3);
+                    var phrasesEditor = $('<div/>',{style: 'height: 150px; min-height:50px;',
+                        class: 'node-text-editor',id: 'node-input-phrases-editor-'+i}).appendTo(row3);
+
                     var finalspan = $('<span/>',{style:"float: right;margin-top: 6px;"}).appendTo(row);
                     finalspan.append(' &#8594; <span class="node-input-topic-index">'+(i+1)+'</span> ');
                     topicField.change(function() {
