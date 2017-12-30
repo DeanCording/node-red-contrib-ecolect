@@ -5,7 +5,7 @@
         color: '#a6bbcf',
         defaults: {
             name: {value:""},
-	    topics: {value:[{name:"", phrases:""}]},
+	    topics: {value:[{name:"", phrases:[], values:[]}]},
 	    outputs: {value:1}
         },
         inputs:1,
@@ -28,6 +28,11 @@
         oneditprepare: function() {
             var node = this;
             var outputCount = $("#node-input-outputs").val("{}");
+
+            var valueTypes = ['text', 'integer', 'number', // 'ordinal', 'enumeration',
+                'date', 'time', 'date-time', 'temperature'];
+
+
             function resizeTopic(topic) {
                 var newWidth = topic.width();
                 var topicField = topic.find("topic");
@@ -45,15 +50,51 @@
                     var topic = opt.t || {};
                     var row = $('<div/>',{class: "form-row"}).appendTo(container);
                     var row2 = $('<div/>',{class: "form-row node-text-editor-row"}).appendTo(container);
+                    var row3 = $('<div/>',{class: "form-row node-text-editor-row"}).appendTo(container);
 
                     $('<label/>',{class:"node-input-topic-label"}).text("Topic").appendTo(row);
 
                     var topicField = $('<input/>',{style:"width:120px; margin-left: 5px;", class: 'node-input-topic-value'}).appendTo(row);
 
-                    $('<label/>',{class:"node-input-phrases-label"}).text("Phrases").appendTo(row2);
+                    $('<label/>',{class:"node-input-values-label"}).text("Values").appendTo(row2);
+
+                    $("#node-input-values-container")..css('min-height','50px')
+                        .css('min-width','400px').editableList({
+
+                        addItem: function(container, i , opt) {
+                            var row = $('<div/>').appendTo(container);
+
+                            $('<label/>',{class:"node-input-valueTypes-label"})
+                                .text("Name").appendTo(row);
+
+                            var valueName = $('<input/>',{style:"width:120px; margin-left: 5px;",
+                                class: 'node-input-value-name'}).appendTo(row);
+
+                            $('<label/>',{class:"node-input-valueTypes-label"})
+                                .text("Type").appendTo(row);
+
+                            var selectField = $('<select/>',{style:"width:120px; margin-left: 5px; text-align: center;"}).appendTo(row);
+                            for (var d in valueTypes) {
+                                selectField.append($("<option></option>").val( valueTypes[d]).text(valueTypes[d]));
+                            }
+
+
+
+                        },
+
+                        removeItem: function(opt) {
+
+                        },
+                        sortable: false,
+                        removable: true
+                    });
+
+
+
+                    $('<label/>',{class:"node-input-phrases-label"}).text("Phrases").appendTo(row3);
 
                     var phrasesEditor = $('<div/>',{style: 'height: 150px; min-height:50px;', class: 'node-text-editor',
-		    	id: 'node-input-phrases-editor-'+i}).appendTo(row2);
+		    	id: 'node-input-phrases-editor-'+i}).appendTo(row3);
                     var finalspan = $('<span/>',{style:"float: right;margin-top: 6px;"}).appendTo(row);
                     finalspan.append(' &#8594; <span class="node-input-topic-index">'+(i+1)+'</span> ');
                     topicField.change(function() {
