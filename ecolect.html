@@ -29,7 +29,7 @@
             var node = this;
             var outputCount = $("#node-input-outputs").val("{}");
 
-            var valueTypes = ['text', 'integer', 'number', // 'ordinal', 'enumeration',
+            var valueTypes = ['text', 'boolean', 'integer', 'number', // 'ordinal', 'enumeration',
                 'date', 'time', 'date-time', 'temperature'];
 
 
@@ -66,14 +66,10 @@
                         addItem: function(container, i , opt) {
                             var row = $('<div/>', {class: "form-row"}).appendTo(container);
 
-                            $('<label/>',{class:"node-input-valueTypes-label"})
-                                .text("Name").appendTo(row);
 
                             var valueName = $('<input/>',{style:"width:120px; margin-left: 5px;",
                                 class: 'node-input-value-name'}).appendTo(row);
 
-                            $('<label/>',{class:"node-input-valueTypes-label"})
-                                .text("Type").appendTo(row);
 
                             var selectField = $('<select/>',{style:"width:120px; margin-left: 5px; text-align: center;"}).appendTo(row);
                             for (var d in valueTypes) {
@@ -89,7 +85,7 @@
                         },
                         sortable: false,
                         removable: true,
-                        header: "Name Type",
+			header: $("<div>").append($.parseHTML("<div style='width:40%; display: inline-grid'>Name</div><div style='display: inline-grid'>Type</div>")),
                         height: "auto"
                     });
 
