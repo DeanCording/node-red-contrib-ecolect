@@ -16,17 +16,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 // Core dependency
-const ecolet = require('ecolet');
+const ecolect = require('ecolect');
 
 const en = require('ecolect/language/en');
 const any = require('ecolect/values/any');
 const boolean = require('ecolect/values/boolean');
 const integer = require('ecolect/values/integer');
 const number = require('ecolect/values/number');
-const ordinal = require('ecolect/values/ordinal');
+//const ordinal = require('ecolect/values/ordinal');
 const enumeration = require('ecolect/values/enumeration');
 const date = require('ecolect/values/date');
-const time = require('ecolect/values/time');
+//const time = require('ecolect/values/time');
 const datetime = require('ecolect/values/datetime');
 const temperature = require('ecolect/values/temperature');
 
@@ -92,7 +92,7 @@ module.exports = function(RED) {
                 }
 
                 node.send(msg);
-            }
+            });
 
         });
     }

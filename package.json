@@ -29,7 +29,7 @@
   },
   "node-red": {
     "nodes": {
-      "talkify": "ecolect.js"
+      "ecolect": "ecolect.js"
     }
   }
 }
