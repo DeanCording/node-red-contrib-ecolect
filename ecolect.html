@@ -5,7 +5,7 @@
         color: '#a6bbcf',
         defaults: {
             name: {value:""},
-	    topics: {value:[{name:"", phrases:[], values:[]}]},
+	    topics: {value: [{name:"", phrases:[], values:[]}]},
 	    outputs: {value:1}
         },
         inputs:1,
@@ -58,7 +58,7 @@
 
                     $('<label/>',{class:"node-input-values-label"}).text("Values").appendTo(row2);
 
-                    $("#node-input-values-container")..css('min-height','50px')
+                    $("#node-input-values-container").css('min-height','50px')
                         .css('min-width','400px').editableList({
 
                         addItem: function(container, i , opt) {
