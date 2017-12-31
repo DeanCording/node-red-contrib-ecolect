@@ -53,6 +53,10 @@ module.exports = function(RED) {
             // Add values to extract
             // builder.value(id, type);
 
+
+            console.log(util.inspect(topic.values);
+
+
             topic.phrases.split("\n").forEach(function (phrase) {
                 if (phrase.length > 2)
                     intent.add(phrase);

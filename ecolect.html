@@ -44,7 +44,7 @@
 
             $("#node-input-topic-container").css('min-height','250px')
                     .css('min-width','450px').editableList({
-                addItem: function(container,i,opt) {
+                addItem: function(container, i, opt) {
                     if (!opt.hasOwnProperty('t')) {
                         opt.t = {};
                     }
@@ -59,7 +59,7 @@
 
                     $('<label/>',{class: "node-input-values-label"}).text("Values").appendTo(row2);
                     var valuesDiv = $('<div/>', {class: "form-row node-input-topic-container-row"}).appendTo(row2);
-                    var valuesList = $("<ol/>").appendTo(valuesDiv);
+                    var valuesList = $("<ol/>", {id:"node-input-values-container-"+i}).appendTo(valuesDiv);
 
                     valuesList.editableList({
 
@@ -76,7 +76,8 @@
                                 selectField.append($("<option></option>").val( valueTypes[d]).text(valueTypes[d]));
                             }
 
-
+                            valueName.val(opt.name);
+                            selectField.val(opt.type);
 
                         },
 
@@ -85,7 +86,7 @@
                         },
                         sortable: false,
                         removable: true,
-			header: $("<div>").append($.parseHTML("<div style='width:40%; display: inline-grid'>Name</div><div style='display: inline-grid'>Type</div>")),
+                        header: $("<div>").append($.parseHTML("<div style='width:40%; display: inline-grid'>Name</div><div style='display: inline-grid'>Type</div>")),
                         height: "auto"
                     });
 
@@ -146,6 +147,8 @@
             for (var i=0;i<this.topics.length;i++) {
                 var topic = this.topics[i];
                 $("#node-input-topic-container").editableList('addItem',{t:topic,i:i});
+
+                $("#node-input-values-container"+i).editableList('addItems',topic.values);
             }
         },
         oneditsave: function() {
@@ -159,6 +162,20 @@
                 t.phrases = topicField[0].editor.getValue();
                 topicField[0].editor.destroy();
                 delete topicField[0].editor;
+
+                var values = $("#node-input-value-container-"+i).editableList('items');
+
+                t.values = [];
+                values.each(function(i){
+                    var name = $(this).find("input").val();
+                    var type = $(this).find("select").val();
+
+                    if (!name == "") {
+                        t.values.push({name: name, type: type});
+                    }
+
+                });
+
                 node.topics.push(t);
             });
         },
