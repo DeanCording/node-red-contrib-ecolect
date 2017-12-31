@@ -75,7 +75,7 @@
                             }
 
                             valueName.val(opt.name);
-                            selectField.val(opt.type || valueType[0]);
+                            selectField.val(opt.type || valueTypes[0]);
 
                         },
 
@@ -165,8 +165,8 @@
                 t.values = [];
                 values.each(function(i){
 console.log("item: "+i);
-                    var name = i.find("input").val();
-                    var type = i.find("select").val();
+                    var name = $(this).find("input").val();
+                    var type = $(this).find("select").val();
 console.log("value: " + name + " " + type);
                     if (name != "") {
                         t.values.push({name: name, type: type});
