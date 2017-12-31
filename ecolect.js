@@ -58,34 +58,34 @@ module.exports = function(RED) {
 
                 switch (value.type) {
                     case "text":
-                        builder.value(value.name, any());
+                        intent.value(value.name, any());
                         break;
                     case "boolean":
-                        builder.value(value.name, boolean());
+                        intent.value(value.name, boolean());
                         break;
                     case "integer":
-                        builder.value(value.name, integer());
+                        intent.value(value.name, integer());
                         break;
                     case "number":
-                        builder.value(value.name, number());
+                        intent.value(value.name, number());
                         break;
 //                    case "ordinal":
-//                        builder.value(value.name, ordinal());
+//                        intent.value(value.name, ordinal());
 //                        break;
 //                    case "enumeration":
-//                        builder.value(value.name, enumeration());
+//                        intent.value(value.name, enumeration());
 //                        break;
                     case "date":
-                        builder.value(value.name, date());
+                        intent.value(value.name, date());
                         break;
 //                    case "time":
-//                        builder.value(value.name, time());
+//                        intent.value(value.name, time());
 //                        break;
                     case "datetime":
-                        builder.value(value.name, datetime());
+                        intent.value(value.name, datetime());
                         break;
                     case "temperature":
-                        builder.value(value.name, temperature());
+                        intent.value(value.name, temperature());
                         break;
                 }
             });
