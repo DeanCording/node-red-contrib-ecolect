@@ -145,7 +145,7 @@
             for (var i=0;i<this.topics.length;i++) {
                 var topic = this.topics[i];
                 $("#node-input-topic-container").editableList('addItem',{t:topic,i:i});
-
+console.log("values: " + topic.values);
                 $("#node-input-values-container"+i).editableList('addItems',topic.values);
             }
         },
