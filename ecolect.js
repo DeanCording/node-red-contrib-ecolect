@@ -54,7 +54,7 @@ module.exports = function(RED) {
             // builder.value(id, type);
 
 
-            console.log(util.inspect(topic.values);
+            console.log("values: " + util.inspect(topic.values));
 
 
             topic.phrases.split("\n").forEach(function (phrase) {

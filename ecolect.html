@@ -77,7 +77,7 @@
                             }
 
                             valueName.val(opt.name);
-                            selectField.val(opt.type);
+                            selectField.val(opt.type || valueType[0]);
 
                         },
 
@@ -164,13 +164,13 @@
                 delete topicField[0].editor;
 
                 var values = $("#node-input-value-container-"+i).editableList('items');
-
                 t.values = [];
                 values.each(function(i){
-                    var name = $(this).find("input").val();
-                    var type = $(this).find("select").val();
-
-                    if (!name == "") {
+console.log("item: "+i);
+                    var name = i.find("input").val();
+                    var type = i.find("select").val();
+console.log("value: " + name + " " + type);
+                    if (name != "") {
                         t.values.push({name: name, type: type});
                     }
 
