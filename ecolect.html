@@ -164,10 +164,8 @@
                 var values = $("#node-input-values-container-"+i).editableList('items');
                 t.values = [];
                 values.each(function(i){
-console.log("item: "+i);
                     var name = $(this).find("input").val();
                     var type = $(this).find("select").val();
-console.log("value: " + name + " " + type);
                     if (name != "") {
                         t.values.push({name: name, type: type});
                     }

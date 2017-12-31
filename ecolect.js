@@ -54,7 +54,41 @@ module.exports = function(RED) {
             // builder.value(id, type);
 
 
-            console.log("values: " + util.inspect(topic.values));
+            topic.values.forEach(function(value) {
+
+                switch (value.type) {
+                    case "text":
+                        builder.value(value.name, any());
+                        break;
+                    case "boolean":
+                        builder.value(value.name, boolean());
+                        break;
+                    case "integer":
+                        builder.value(value.name, integer());
+                        break;
+                    case "number":
+                        builder.value(value.name, number());
+                        break;
+//                    case "ordinal":
+//                        builder.value(value.name, ordinal());
+//                        break;
+//                    case "enumeration":
+//                        builder.value(value.name, enumeration());
+//                        break;
+                    case "date":
+                        builder.value(value.name, date());
+                        break;
+//                    case "time":
+//                        builder.value(value.name, time());
+//                        break;
+                    case "datetime":
+                        builder.value(value.name, datetime());
+                        break;
+                    case "temperature":
+                        builder.value(value.name, temperature());
+                        break;
+                }
+            });
 
 
             topic.phrases.split("\n").forEach(function (phrase) {
