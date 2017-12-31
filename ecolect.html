@@ -66,10 +66,8 @@
                         addItem: function(container, i , opt) {
                             var row = $('<div/>', {class: "form-row"}).appendTo(container);
 
-
                             var valueName = $('<input/>',{style:"width:120px; margin-left: 5px;",
                                 class: 'node-input-value-name'}).appendTo(row);
-
 
                             var selectField = $('<select/>',{style:"width:120px; margin-left: 5px; text-align: center;"}).appendTo(row);
                             for (var d in valueTypes) {
@@ -163,7 +161,7 @@
                 topicField[0].editor.destroy();
                 delete topicField[0].editor;
 
-                var values = $("#node-input-value-container-"+i).editableList('items');
+                var values = $("#node-input-values-container-"+i).editableList('items');
                 t.values = [];
                 values.each(function(i){
 console.log("item: "+i);
