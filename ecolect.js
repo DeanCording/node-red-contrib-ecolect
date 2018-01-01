@@ -96,7 +96,7 @@ module.exports = function(RED) {
             node.outputs.push(topic.name);
         });
 
-        node-outputs.push('unrecognised');
+        node.outputs.push('unrecognised');
 
         node.intents = builder.build();
 

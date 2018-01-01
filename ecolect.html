@@ -18,7 +18,7 @@
         inputs:1,
         outputs:1,
         outputLabels: function(index) {
-	    if (index > this.topics.length) return 'unknown';
+	    if (index > this.topics.length-1) return 'unrecognised';
 
             var topic = this.topics[index].name;
             if (topic) {
@@ -34,7 +34,7 @@
         },
         oneditprepare: function() {
             var node = this;
-            var outputCount = $("#node-input-outputs").val("{999: 999}");
+            var outputCount = $("#node-input-outputs").val('{"999": 999}');
 
             var valueTypes = ['text', 'boolean', 'integer', 'number', // 'ordinal', 'enumeration',
                 'date', 'time', 'date-time', 'temperature'];
@@ -149,7 +149,7 @@
                     });
                     outputCount.val(JSON.stringify(currentOutputs));
                 },
-                sortable: false,
+                sortable: true,
                 removable: true,
                 addButton: "add topic"
             });
