@@ -5,12 +5,12 @@
         color: '#a6bbcf',
         defaults: {
             name: {value:""},
-            topics: {value: [{name:"", phrases:"", values:[]}], validate: function(t) {
-                    topics.forEach(topic) {
+            topics: {value: [{name:"", phrases:"", values:[]}], validate: function(topics) {
+                    return topics.every(function(topic) {
                         if (topic.name.trim().length == 0) return false;
-                        if (topic.phrases.replace(/\n/gm, '').trim().length == 0 return false;
+                        if (topic.phrases.replace(/\n/gm, '').trim().length == 0) return false;
                         return true;
-                    }
+                    });
                 }
             },
             outputs: {value:1}
@@ -92,7 +92,8 @@
                         sortable: false,
                         removable: true,
                         header: $("<div>").append($.parseHTML("<div style='width:40%; display: inline-grid'>Name</div><div style='display: inline-grid'>Type</div>")),
-                        height: "auto"
+                        height: "auto",
+			addButton: "add value"
                     });
 
 
@@ -149,7 +150,8 @@
                     outputCount.val(JSON.stringify(currentOutputs));
                 },
                 sortable: true,
-                removable: true
+                removable: true,
+		addButton: "add topic"
             });
             for (var i=0;i<this.topics.length;i++) {
                 var topic = this.topics[i];
