@@ -34,7 +34,7 @@
         },
         oneditprepare: function() {
             var node = this;
-            var outputCount = $("#node-input-outputs").val("{}");
+            var outputCount = $("#node-input-outputs").val("{999: 999}");
 
             var valueTypes = ['text', 'boolean', 'integer', 'number', // 'ordinal', 'enumeration',
                 'date', 'time', 'date-time', 'temperature'];
@@ -149,7 +149,7 @@
                     });
                     outputCount.val(JSON.stringify(currentOutputs));
                 },
-                sortable: true,
+                sortable: false,
                 removable: true,
                 addButton: "add topic"
             });
@@ -159,6 +159,7 @@
             }
         },
         oneditsave: function() {
+
             var topics = $("#node-input-topic-container").editableList('items');
             var node = this;
             node.topics = [];
@@ -183,6 +184,8 @@
 
                 node.topics.push(t);
             });
+
+
         },
         oneditresize: function(size) {
             var rows = $("#dialog-form>div:not(.node-input-topic-container-row)");
