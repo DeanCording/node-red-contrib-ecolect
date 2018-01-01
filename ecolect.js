@@ -122,11 +122,14 @@ module.exports = function(RED) {
         node.on('input', function(msg) {
 
             node.intents.match(msg.payload).then(results => {
+
+node.log(util.inspect(results, {colors: true, depth: null});
+
                 if (results.best) {
                     msg.topic = results.best.intent;
                     msg.values = results.best.values;
                 } else {
-                    msg.topic = "unknown";
+                    msg.topic = "unrecognised";
                 }
 
                 node.send(msg);

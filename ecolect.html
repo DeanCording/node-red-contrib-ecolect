@@ -13,7 +13,7 @@
                     });
                 }
             },
-            outputs: {value:1}
+            outputs: {value:2}
         },
         inputs:1,
         outputs:1,
@@ -93,7 +93,7 @@
                         removable: true,
                         header: $("<div>").append($.parseHTML("<div style='width:40%; display: inline-grid'>Name</div><div style='display: inline-grid'>Type</div>")),
                         height: "auto",
-			addButton: "add value"
+                        addButton: "add value"
                     });
 
 
@@ -151,7 +151,7 @@
                 },
                 sortable: true,
                 removable: true,
-		addButton: "add topic"
+                addButton: "add topic"
             });
             for (var i=0;i<this.topics.length;i++) {
                 var topic = this.topics[i];
