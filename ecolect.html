@@ -64,6 +64,7 @@
                     valuesList.editableList({
 
                         addItem: function(container, i , opt) {
+				console.log(opt);
                             var row = $('<div/>', {class: "form-row"}).appendTo(container);
 
                             var valueName = $('<input/>',{style:"width:120px; margin-left: 5px;",
@@ -102,6 +103,8 @@
                     });
                     topicField.val(topic.name);
                     topicField.change();
+
+	            valuesList.editableList('addItems',topic.values);
 
                     topicField[0].editor = RED.editor.createEditor({
                         id: 'node-input-phrases-editor-'+i,
@@ -144,9 +147,8 @@
             });
             for (var i=0;i<this.topics.length;i++) {
                 var topic = this.topics[i];
-                $("#node-input-topic-container").editableList('addItem',{t:topic,i:i});
-console.log("values: " + topic.values);
-                $("#node-input-values-container"+i).editableList('addItems',topic.values);
+
+		$("#node-input-topic-container").editableList('addItem',{t:topic,i:i});
             }
         },
         oneditsave: function() {
