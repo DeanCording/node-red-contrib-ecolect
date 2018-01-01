@@ -123,11 +123,12 @@ module.exports = function(RED) {
 
             node.intents.match(msg.payload).then(results => {
 
-node.log(util.inspect(results, {colors: true, depth: null});
+node.log(util.inspect(results, {colors: true, depth: null}));
 
                 if (results.best) {
                     msg.topic = results.best.intent;
                     msg.values = results.best.values;
+		    msg.score = results.best.score;
                 } else {
                     msg.topic = "unrecognised";
                 }
