@@ -51,9 +51,6 @@ module.exports = function(RED) {
             var intent = builder.intent(topic.name);
 
             // Add values to extract
-            // builder.value(id, type);
-
-
             topic.values.forEach(function(value) {
 
                 switch (value.type) {
@@ -98,6 +95,8 @@ module.exports = function(RED) {
             intent.done();
             node.outputs.push(topic.name);
         });
+
+        node-outputs.push('unrecognised');
 
         node.intents = builder.build();
 
