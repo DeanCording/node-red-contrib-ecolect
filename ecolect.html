@@ -5,8 +5,15 @@
         color: '#a6bbcf',
         defaults: {
             name: {value:""},
-	    topics: {value: [{name:"", phrases:"", values:[]}]},
-	    outputs: {value:1}
+            topics: {value: [{name:"", phrases:"", values:[]}], validate: function(t) {
+                    topics.forEach(topic) {
+                        if (topic.name.trim().length == 0) return false;
+                        if (topic.phrases.replace(/\n/gm, '').trim().length == 0 return false;
+                        return true;
+                    }
+                }
+            },
+            outputs: {value:1}
         },
         inputs:1,
         outputs:1,
@@ -46,9 +53,9 @@
                     .css('min-width','450px').editableList({
                 addItem: function(container, i, opt) {
                     if (!opt.hasOwnProperty('t')) {
-                        opt.t = {};
+                        opt.t = {values:[]};
                     }
-                    var topic = opt.t || {};
+                    var topic = opt.t || {values:[]};
                     var row = $('<div/>',{class: "form-row"}).appendTo(container);
                     var row2 = $('<div/>',{class: "form-row"}).appendTo(container);
                     var row3 = $('<div/>',{class: "form-row node-text-editor-row"}).appendTo(container);
@@ -64,7 +71,6 @@
                     valuesList.editableList({
 
                         addItem: function(container, i , opt) {
-				console.log(opt);
                             var row = $('<div/>', {class: "form-row"}).appendTo(container);
 
                             var valueName = $('<input/>',{style:"width:120px; margin-left: 5px;",
@@ -104,7 +110,7 @@
                     topicField.val(topic.name);
                     topicField.change();
 
-	            valuesList.editableList('addItems',topic.values);
+                    valuesList.editableList('addItems',topic.values);
 
                     topicField[0].editor = RED.editor.createEditor({
                         id: 'node-input-phrases-editor-'+i,
@@ -147,8 +153,7 @@
             });
             for (var i=0;i<this.topics.length;i++) {
                 var topic = this.topics[i];
-
-		$("#node-input-topic-container").editableList('addItem',{t:topic,i:i});
+                $("#node-input-topic-container").editableList('addItem',{t:topic,i:i});
             }
         },
         oneditsave: function() {
@@ -157,7 +162,7 @@
             node.topics = [];
             topics.each(function(i) {
                 var topicField = $(this).find(".node-input-topic-value");
-                var topic = topicField.val();
+                var topic = topicField.val().trim();
                 var t = {name: topic};
                 t.phrases = topicField[0].editor.getValue();
                 topicField[0].editor.destroy();
@@ -166,7 +171,7 @@
                 var values = $("#node-input-values-container-"+i).editableList('items');
                 t.values = [];
                 values.each(function(i){
-                    var name = $(this).find("input").val();
+                    var name = $(this).find("input").val().trim();
                     var type = $(this).find("select").val();
                     if (name != "") {
                         t.values.push({name: name, type: type});

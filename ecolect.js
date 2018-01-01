@@ -92,8 +92,8 @@ module.exports = function(RED) {
 
 
             topic.phrases.split("\n").forEach(function (phrase) {
-                if (phrase.length > 2)
-                    intent.add(phrase);
+                if (phrase.trim().length > 1)
+                    intent.add(phrase.trim());
                 });
             intent.done();
             node.outputs.push(topic.name);
