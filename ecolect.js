@@ -18,6 +18,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 // Core dependency
 const ecolect = require('ecolect');
 
+const { LanguageSpecificValue, ParsingValue } = require('ecolect/index');
+
 const en = require('ecolect/language/en');
 const any = require('ecolect/values/any');
 const boolean = require('ecolect/values/boolean');
@@ -27,6 +29,8 @@ const number = require('ecolect/values/number');
 const enumeration = require('ecolect/values/enumeration');
 const date = require('ecolect/values/date');
 //const time = require('ecolect/values/time');
+const time = function() {return new LanguageSpecificValue(language => new ParsingValue(language.time));
+
 const datetime = require('ecolect/values/datetime');
 const temperature = require('ecolect/values/temperature');
 
@@ -100,37 +104,22 @@ module.exports = function(RED) {
 
         node.intents = builder.build();
 
-        var action = function(context, request, response, next) {
-
-            var msg = request.id;
-            var msgs = new Array(node.outputs.length);
-
-            if (request.skill.current.name == 'recognised') {
-                msg.topic = request.skill.current.topic.name;
-                msg.confidence = request.skill.current.topic.confidence;
-            } else {
-                msg.topic = 'unknown';
-            }
-
-            msgs[node.outputs.findIndex(function (output) { return output == msg.topic})] = msg;
-            node.send(msgs);
-            next();
-        };
-
-
         node.on('input', function(msg) {
 
             node.intents.match(msg.payload).then(results => {
 
-node.log(util.inspect(results, {colors: true, depth: null}));
+                node.trace(util.inspect(results, {colors: true, depth: null}));
 
                 if (results.best) {
                     msg.topic = results.best.intent;
                     msg.values = results.best.values;
-		    msg.score = results.best.score;
+                    msg.score = results.best.score;
                 } else {
                     msg.topic = "unrecognised";
                 }
+
+                var msgs = new Array(node.outputs.length);
+                msgs[node.outputs.findIndex(function (output) { return output == msg.topic})] = msg;
 
                 node.send(msg);
             });
