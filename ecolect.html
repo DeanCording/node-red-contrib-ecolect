@@ -36,7 +36,7 @@
             var node = this;
             var outputCount = $("#node-input-outputs").val('{"999": 999}');
 
-            var valueTypes = ['text', 'boolean', 'integer', 'number',  'ordinal', //'enumeration',
+            var valueTypes = ['text', 'boolean', 'integer', 'number',  'ordinal', 'enumeration',
                 'date', 'time', 'date-time', 'temperature'];
 
 
@@ -70,8 +70,9 @@
 
                     valuesList.editableList({
 
-                        addItem: function(container, i , opt) {
+                        addItem: function(container, vi , opt) {
                             var row = $('<div/>', {class: "form-row"}).appendTo(container);
+                            var row2 = $('<div/>', {class: "form-row"}).appendTo(container).hide();
 
                             var valueName = $('<input/>',{style:"width:120px; margin-left: 5px;",
                                 class: 'node-input-value-name'}).appendTo(row);
@@ -81,8 +82,43 @@
                                 selectField.append($("<option></option>").val( valueTypes[d]).text(valueTypes[d]));
                             }
 
+                            var enumerationsEditor = $('<div/>',{style: 'height: 150px; min-height:50px;',
+                                class: 'node-text-editor'}).appendTo(row2);
+
+                            valueName[0].editor = RED.editor.createEditor({
+                                id: enumerationsEditor[0],
+                                mode: 'ace/mode/text'
+                            });
+
+
+                            selectField.change(function() {
+                                var type = selectField.val();
+
+                                if (type == 'enumeration') {
+                                    row2.show();
+                                } else {
+                                    row2.hide();
+                                }
+                            });
+
                             valueName.val(opt.name);
                             selectField.val(opt.type || valueTypes[0]);
+
+                            if (selectField.val() == 'enumeration') {
+
+                                var enumerationText = "";
+
+                                opt.enumerations.forEach(function (enumeration){
+                                    enumerationText = enumerationText + enumeration + '\n';
+                                });
+
+                                valueName[0].editor.setValue(
+                                    enumerationText.slice(0,enumerationText.length-1), -1);
+
+                            };
+
+                            selectField.change();
+
 
                         },
 
@@ -176,9 +212,29 @@
                 values.each(function(i){
                     var name = $(this).find("input").val().trim();
                     var type = $(this).find("select").val();
-                    if (name != "") {
-                        t.values.push({name: name, type: type});
+                    var enumerations = [];
+                    var enumerationsEditor = $(this).find("input")[0].editor;
+
+                    if (type == 'enumeration') {
+                        enumerations = enumerationsEditor.getValue().split('\n');
+
+
+                        enumerations.forEach(function (text, index, arr) {
+                            arr[index] = arr[index].trim();
+                        });
+
+                        enumerations = enumerations.filter(function (text) {
+                            return text.length > 0;
+                        });
                     }
+
+                    enumerationsEditor.destroy();
+
+                    if (name != "") {
+                        t.values.push({name: name, type: type, enumerations: enumerations});
+                    }
+
+
 
                 });
 
@@ -252,9 +308,7 @@
     message is about and to extract the required values from it.</p>
     <p><code>msg.topic</code> is set to the closest matching topic for the message, or <i>unrecognised</i>
     if no topics are a close enough match.</p>
-    <p>Messages for each topic are sent on separate outputs so that they can be
-    processed by a flow specific to that topic.  The last output is always for messages
-    that the processor could not recognise.</p>
+
 
 <h3>Configuration</h3>
     <p>The node configuration provides the information to train the natural language matcher
@@ -265,10 +319,10 @@
         <dt>Phrases</dt><dd>a list of phrases that would match this topic.  Values to be extracted from the phrase are enclosing the value name in <code>{}</code> brackets.</dd>
     </dl>
 
-    <p> The natural language
-        matcher uses fuzzy logic to determine the match between the message text and the specified
-        phrases to identify the best matching topic. Simple variations of specified phrases
-        should be matched but the more phrases that are specified the better the matching. </p>
+    <p> The natural language matcher uses fuzzy logic to determine the match between the message
+        text and the specified phrases to identify the best matching topic. Simple variations of
+        specified phrases should be matched but the more phrases that are specified the better
+        the matching. </p>
     <h4>Example</h4>
     <table style="border:1px solid #ddd;">
     <tr style="border:1px solid #ddd;"><td style="vertical-align:top;">Topic</td><td>switch</td></tr>

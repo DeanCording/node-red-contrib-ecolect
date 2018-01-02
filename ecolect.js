@@ -76,7 +76,7 @@ module.exports = function(RED) {
                         intent.value(value.name, ordinal());
                         break;
                     case "enumeration":
-                        intent.value(value.name, enumeration());
+                        intent.value(value.name, enumeration(value.enumerations || []));
                         break;
                     case "date":
                         intent.value(value.name, date());
