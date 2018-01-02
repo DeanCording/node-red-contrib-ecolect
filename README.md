@@ -9,6 +9,8 @@ that the processor could not recognise.
 
 The output message contains the matched topic and the extracted values. All other message properties are passed through unchanged.</p>
 
+## Configuration
+
 The node configuration provides the information to train the natural language matcher
 about the topics it should attempt to match.  The configuration for each topic consists of:
 
@@ -22,7 +24,7 @@ specified phrases should be matched but the more phrases that are specified the 
 the matching.
 
 
-Example
+## Example
 
  - **Topic** switch
  - **Values**
