@@ -18,7 +18,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 // Core dependency
 const ecolect = require('ecolect');
 
-const { LanguageSpecificValue, ParsingValue } = require('ecolect/index');
+const { LanguageSpecificValue, ParsingValue } = require('ecolect/values/index');
 
 const en = require('ecolect/language/en');
 const any = require('ecolect/values/any');
@@ -26,10 +26,12 @@ const boolean = require('ecolect/values/boolean');
 const integer = require('ecolect/values/integer');
 const number = require('ecolect/values/number');
 //const ordinal = require('ecolect/values/ordinal');
+const ordinal = function() {return new LanguageSpecificValue(language => new ParsingValue(language.ordinal));};
+
 const enumeration = require('ecolect/values/enumeration');
 const date = require('ecolect/values/date');
 //const time = require('ecolect/values/time');
-const time = function() {return new LanguageSpecificValue(language => new ParsingValue(language.time));
+const time = function() {return new LanguageSpecificValue(language => new ParsingValue(language.time));};
 
 const datetime = require('ecolect/values/datetime');
 const temperature = require('ecolect/values/temperature');
@@ -70,19 +72,19 @@ module.exports = function(RED) {
                     case "number":
                         intent.value(value.name, number());
                         break;
-//                    case "ordinal":
-//                        intent.value(value.name, ordinal());
-//                        break;
-//                    case "enumeration":
-//                        intent.value(value.name, enumeration());
-//                        break;
+                    case "ordinal":
+                        intent.value(value.name, ordinal());
+                        break;
+                    case "enumeration":
+                        intent.value(value.name, enumeration());
+                        break;
                     case "date":
                         intent.value(value.name, date());
                         break;
-//                    case "time":
-//                        intent.value(value.name, time());
-//                        break;
-                    case "datetime":
+                    case "time":
+                        intent.value(value.name, time());
+                        break;
+                    case "date-time":
                         intent.value(value.name, datetime());
                         break;
                     case "temperature":
@@ -121,7 +123,7 @@ module.exports = function(RED) {
                 var msgs = new Array(node.outputs.length);
                 msgs[node.outputs.findIndex(function (output) { return output == msg.topic})] = msg;
 
-                node.send(msg);
+                node.send(msgs);
             });
 
         });
