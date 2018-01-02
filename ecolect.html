@@ -217,5 +217,80 @@
 </script>
 
 <script type="text/x-red" data-help-name="ecolect">
-    <p>A node that processes msg.payload using natural language processing</p>
+    <p>A node that processes plain text strings using natural language processing to identify
+    the topic and values of the message.</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>payload
+            <span class="property-type">string</span>
+        </dt>
+        <dd> the plain text message to processed. </dd>
+    </dl>
+
+ <h3>Outputs</h3>
+        <dl class="message-properties">
+            <dt>topic <span class="property-type">string</span></dt>
+            <dd>the name of the topic identified for the message or <i>unrecognised</i> if
+            it could not be determined</dd>
+            <dt>payload <span class="property-type">string</span></dt>
+            <dd>the original text of the message.</dd>
+            <dt>values <span class="property-type">object</span></dt>
+            <dd>values extracted from the plain text of the message.</dd>
+            <dt>score <span class="property-type">float</span></dt>
+            <dd>a confidence score of the match to the intent</dd>
+        </dl>
+
+        <p>All other message properties are passed through unchanged.</p>
+
+        <p>Messages for each topic are sent on separate outputs so that they can be
+        processed by a flow specific to that topic.  The last output is always for messages
+        that the processor could not recognise.</p>
+
+<h3>Details</h3>
+    <p><code>msg.payload</code> is used as the text of the message to determine what topic the
+    message is about and to extract the required values from it.</p>
+    <p><code>msg.topic</code> is set to the closest matching topic for the message, or <i>unrecognised</i>
+    if no topics are a close enough match.</p>
+    <p>Messages for each topic are sent on separate outputs so that they can be
+    processed by a flow specific to that topic.  The last output is always for messages
+    that the processor could not recognise.</p>
+
+<h3>Configuration</h3>
+    <p>The node configuration provides the information to train the natural language matcher
+    about the topics it should attempt to match.  The configuration for each topic consists of:</p>
+    <dl class="message-properties">
+        <dt>Topic</dt><dd> the name of this topic</dd>
+        <dt>Values</dt><dd>the <i>name</i> and <i>type</i> of values to be extracted from the message.</dd>
+        <dt>Phrases</dt><dd>a list of phrases that would match this topic.  Values to be extracted from the phrase are enclosing the value name in <code>{}</code> brackets.</dd>
+    </dl>
+
+    <p> The natural language
+        matcher uses fuzzy logic to determine the match between the message text and the specified
+        phrases to identify the best matching topic. Simple variations of specified phrases
+        should be matched but the more phrases that are specified the better the matching. </p>
+    <h4>Example</h4>
+    <table style="border:1px solid #ddd;">
+    <tr style="border:1px solid #ddd;"><td style="vertical-align:top;">Topic</td><td>switch</td></tr>
+    <tr style="border:1px solid #ddd;"><td style="vertical-align:top;">Values</td>
+        <td><ul><li>room - <i>text</i></li>
+        <li>item - <i>text</i></li>
+        <li>state - <i>boolean</i></li>
+        <li>when - <i>date-time</i></li></ul></td></tr>
+    <tr style="border:1px solid #ddd;"><td style="vertical-align:top;">Phrases</td>
+        <td><ul><li>turn {item} {state} in {room} at {when}</li><li>turn {state} {room} {item}
+        </li><li>turn {room} {item} {state}</li></ul></td></tr>
+    </table>
+
+    Matches the following phrases:
+    <ul><li>turn on the kitchen light at 9pm</li>
+    <li>turn on bedroom light</li>
+    <li>turn bedroom light off</li>
+    </ul>
+
+
+<h3>References</h3>
+    <ul>
+        <li><a href="https://www.npmjs.com/package/ecolect">Ecolect</a> - full documentation of Ecolect natural language parsing library.</li>
+    </ul>
 </script>
