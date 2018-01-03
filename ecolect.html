@@ -66,7 +66,7 @@
 
                     $('<label/>',{class: "node-input-values-label"}).text("Values").appendTo(row2);
                     var valuesDiv = $('<div/>', {class: "form-row node-input-topic-container-row"}).appendTo(row2);
-                    var valuesList = $("<ol/>", {id:"node-input-values-container-"+i}).appendTo(valuesDiv);
+                    var valuesList = $("<ol/>", {class:"node-input-values-container"}).appendTo(valuesDiv);
 
                     valuesList.editableList({
 
@@ -195,7 +195,6 @@
             }
         },
         oneditsave: function() {
-
             var topics = $("#node-input-topic-container").editableList('items');
             var node = this;
             node.topics = [];
@@ -207,7 +206,7 @@
                 topicField[0].editor.destroy();
                 delete topicField[0].editor;
 
-                var values = $("#node-input-values-container-"+i).editableList('items');
+                var values = $(this).find(".node-input-values-container").editableList('items');
                 t.values = [];
                 values.each(function(i){
                     var name = $(this).find("input").val().trim();
