@@ -16,7 +16,7 @@ about the topics it should attempt to match.  The configuration for each topic c
 
  - Topic - the name of this topic
  - Values - the *name* and *type* of values to be extracted from the message.
- - Phrases - a list of phrases that would match this topic.  Values to be extracted from the phrase are enclosing the value name in {} brackets.
+ - Phrases - a list of phrases that would match this topic.  Values to be extracted from the phrase are identified by enclosing the value name in {} brackets.
 
 The natural language matcher uses fuzzy logic to determine the match between the message
 text and the specified phrases to identify the best matching topic. Simple variations of
