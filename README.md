@@ -21,15 +21,16 @@ about the topics it should attempt to match.  The configuration for each topic c
 The natural language matcher uses fuzzy logic to determine the match between the message
 text and the specified phrases to identify the best matching topic. Simple variations of
 specified phrases should be matched but the more phrases that are specified the better
-the matching.
+the matching.  If you use enumerations for values that have a small set of known values, then 
+the matching will be much better.
 
 
 ## Example
 
  - **Topic** switch
  - **Values**
-    - room - *text*
-    - item - *text*
+    - room - *enumeration* ("bedroom", "kitchen", "study", "kids bedroom")
+    - item - *enumberation* ("light", "fan", "radio", "heater")
     - state - *boolean*
     - when - *date-time*
   - **Phrases**
@@ -38,7 +39,7 @@ the matching.
     - turn {room} {item} {state}
 
 Matches the following phrases:
-  - turn on the kitchen light at 9pm
+  - turn on kitchen light at 9pm
   - turn on bedroom light
   - turn bedroom light off
 
