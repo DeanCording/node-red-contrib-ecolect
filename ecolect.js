@@ -6,7 +6,7 @@ node-red-contrib-ecolect - A Node Red node to process natural language using Eco
 
 MIT License
 
-Copyright (c) 2018 Dean Cording
+Copyright (c) 2018 Dean Cording <dean@cording.id.au>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -53,8 +53,13 @@ module.exports = function(RED) {
 
         var trainingDocuments = [];
 
+        node.status({});
+
+        var error;
+
         node.topics.forEach(function(topic) {
             var intent = builder.intent(topic.name);
+
 
             // Add values to extract
             topic.values.forEach(function(value) {
@@ -96,7 +101,13 @@ module.exports = function(RED) {
 
             topic.phrases.split("\n").forEach(function (phrase) {
                 if (phrase.trim().length > 1)
-                    intent.add(phrase.trim());
+                    try {
+                        intent.add(phrase.trim());
+                    }
+                    catch (e) {
+                        node.error(topic.name + ": " + e.message);
+                        error  = e.message;
+                    }
                 });
             intent.done();
             node.outputs.push(topic.name);
@@ -105,6 +116,11 @@ module.exports = function(RED) {
         node.outputs.push('unrecognised');
 
         node.intents = builder.build();
+
+        if (error) {
+            node.status({fill:"red",shape:"dot",text: error});
+        }
+
 
         node.on('input', function(msg) {
 

@@ -62,7 +62,7 @@
 
                     $('<label/>',{class:"node-input-topic-label"}).text("Topic").appendTo(row);
 
-                    var topicField = $('<input/>',{style:"width:120px; margin-left: 5px;", class: 'node-input-topic-value'}).appendTo(row);
+                    var topicField = $('<input/>',{type: "text", style:"width:120px; margin-left: 5px;", class: 'node-input-topic-value'}).appendTo(row).focus();
 
                     $('<label/>',{class: "node-input-values-label"}).text("Values").appendTo(row2);
                     var valuesDiv = $('<div/>', {class: "form-row node-input-topic-container-row"}).appendTo(row2);
@@ -71,13 +71,14 @@
                     valuesList.editableList({
 
                         addItem: function(container, vi , opt) {
-                            var row = $('<div/>', {class: "form-row"}).appendTo(container);
-                            var row2 = $('<div/>', {class: "form-row"}).appendTo(container).hide();
+                            var row = $('<div/>', {class: "form-row", style: "margin-bottom: 0;"})
+                                .appendTo(container);
+                            var row2 = $('<div/>', {class: "form-row", style: "margin-bottom: 0; margin-top: 8px"}).appendTo(container).hide();
 
-                            var valueName = $('<input/>',{style:"width:120px; margin-left: 5px;",
-                                class: 'node-input-value-name'}).appendTo(row);
+                            var valueName = $('<input/>',{type: "text", style:"width:auto;",
+                                class: 'node-input-value-name'}).appendTo(row).focus();
 
-                            var selectField = $('<select/>',{style:"width:120px; margin-left: 5px; text-align: center;"}).appendTo(row);
+                            var selectField = $('<select/>',{style:"width:auto; margin-left: 5px; text-align: center;"}).appendTo(row);
                             for (var d in valueTypes) {
                                 selectField.append($("<option></option>").val( valueTypes[d]).text(valueTypes[d]));
                             }
@@ -275,6 +276,15 @@
     <p>A node that processes plain text strings using natural language processing to identify
     the topic and values of the message.</p>
 
+    <h3>Configuration</h3>
+    <p>The node configuration provides the information to train the natural language matcher
+    about the topics it should attempt to match.  The configuration for each topic consists of:</p>
+    <dl class="message-properties">
+        <dt>Topic</dt><dd> the name of this topic</dd>
+        <dt>Values</dt><dd>the <i>name</i> and <i>type</i> of values to be extracted from the message.</dd>
+        <dt>Phrases</dt><dd>a list of phrases that would match this topic.  Values to be extracted from the phrase are identified by enclosing the value name in <code>{}</code> brackets.</dd>
+    </dl>
+
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt>payload
@@ -308,20 +318,11 @@
     <p><code>msg.topic</code> is set to the closest matching topic for the message, or <i>unrecognised</i>
     if no topics are a close enough match.</p>
 
-
-<h3>Configuration</h3>
-    <p>The node configuration provides the information to train the natural language matcher
-    about the topics it should attempt to match.  The configuration for each topic consists of:</p>
-    <dl class="message-properties">
-        <dt>Topic</dt><dd> the name of this topic</dd>
-        <dt>Values</dt><dd>the <i>name</i> and <i>type</i> of values to be extracted from the message.</dd>
-        <dt>Phrases</dt><dd>a list of phrases that would match this topic.  Values to be extracted from the phrase are enclosing the value name in <code>{}</code> brackets.</dd>
-    </dl>
-
     <p> The natural language matcher uses fuzzy logic to determine the match between the message
         text and the specified phrases to identify the best matching topic. Simple variations of
         specified phrases should be matched but the more phrases that are specified the better
-        the matching. </p>
+        the matching. Using <code>enumeration</code> type for values instead of <code>text</code>
+        when there is a known set of possible words improves the quality of matches.</p>
     <h4>Example</h4>
     <table style="border:1px solid #ddd;">
     <tr style="border:1px solid #ddd;"><td style="vertical-align:top;">Topic</td><td>switch</td></tr>
