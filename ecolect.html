@@ -137,7 +137,7 @@
 
                     $('<label/>',{class:"node-input-phrases-label"}).text("Phrases").appendTo(row3);
 
-                    var phrasesEditor = $('<div/>',{style: 'height: 150px; min-height:50px;',
+                    $('<div/>',{style: 'height: 150px; min-height:50px;',
                         class: 'node-text-editor',id: 'node-input-phrases-editor-'+i}).appendTo(row3);
 
                     var finalspan = $('<span/>',{style:"float: right;margin-top: 6px;"}).appendTo(row);
@@ -154,6 +154,7 @@
                         id: 'node-input-phrases-editor-'+i,
                         mode: 'ace/mode/text',
                         value: topic.phrases,
+                        options: {minLines: 5, maxLines: 40}
                     });
 
                     var currentOutputs = JSON.parse(outputCount.val()||"{}");
