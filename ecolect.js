@@ -1,55 +1,58 @@
 /*****
 
-node-red-contrib-ecolect - A Node Red node to process natural language using Ecolect
+ node-red-contrib-ecolect - A Node Red node to process natural language using Ecolect
 
-(https://www.npmjs.com/package/ecolect)
+ (https://www.npmjs.com/package/ecolect)
 
-MIT License
+ MIT License
 
-Copyright (c) 2018 Dean Cording <dean@cording.id.au>
+ Copyright (c) 2018 Dean Cording <dean@cording.id.au>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
 // Core dependency
 const ecolect = require('ecolect');
 
-const { LanguageSpecificValue, ParsingValue } = require('ecolect/values/index');
+const {LanguageSpecificValue, ParsingValue} = require('ecolect/values');
 
 const en = require('ecolect/language/en');
-const any = require('ecolect/values/any');
-const boolean = require('ecolect/values/boolean');
-const integer = require('ecolect/values/integer');
-const number = require('ecolect/values/number');
+const {any} = require('ecolect/values');
+const {boolean} = require('ecolect/values');
+const {integer} = require('ecolect/values');
+const {number} = require('ecolect/values');
 //const ordinal = require('ecolect/values/ordinal');
-const ordinal = function() {return new LanguageSpecificValue(language => new ParsingValue(language.ordinal));};
+const ordinal = function () {
+    return new LanguageSpecificValue(language => new ParsingValue(language.ordinal));
+};
 
-const enumeration = require('ecolect/values/enumeration');
-const date = require('ecolect/values/date');
+const {enumeration} = require('ecolect/values');
+const {date} = require('ecolect/values');
 //const time = require('ecolect/values/time');
-const time = function() {return new LanguageSpecificValue(language => new ParsingValue(language.time));};
+const time = function () {
+    return new LanguageSpecificValue(language => new ParsingValue(language.time));
+};
 
-const datetime = require('ecolect/values/datetime');
-const temperature = require('ecolect/values/temperature');
+const {datetime} = require('ecolect/values');
+const {temperature} = require('ecolect/values');
 
 
 const util = require('util');
 
 
-
-module.exports = function(RED) {
+module.exports = function (RED) {
     function EcolectNode(config) {
-        RED.nodes.createNode(this,config);
+        RED.nodes.createNode(this, config);
         var node = this;
 
         node.topics = config.topics || [];
         node.outputs = [];
 
-        var builder = ecolect.intents(en);
+        var builder = ecolect.intentsBuilder(en);
 
         var trainingDocuments = [];
 
@@ -57,12 +60,12 @@ module.exports = function(RED) {
 
         var error;
 
-        node.topics.forEach(function(topic) {
+        node.topics.forEach(function (topic) {
             var intent = builder.intent(topic.name);
 
 
             // Add values to extract
-            topic.values.forEach(function(value) {
+            topic.values.forEach(function (value) {
 
                 switch (value.type) {
                     case "text":
@@ -103,12 +106,11 @@ module.exports = function(RED) {
                 if (phrase.trim().length > 1)
                     try {
                         intent.add(phrase.trim());
-                    }
-                    catch (e) {
+                    } catch (e) {
                         node.error(topic.name + ": " + e.message);
-                        error  = e.message;
+                        error = e.message;
                     }
-                });
+            });
             intent.done();
             node.outputs.push(topic.name);
         });
@@ -118,11 +120,11 @@ module.exports = function(RED) {
         node.intents = builder.build();
 
         if (error) {
-            node.status({fill:"red",shape:"dot",text: error});
+            node.status({fill: "red", shape: "dot", text: error});
         }
 
 
-        node.on('input', function(msg) {
+        node.on('input', function (msg) {
 
             node.intents.match(msg.payload).then(results => {
 
@@ -137,13 +139,16 @@ module.exports = function(RED) {
                 }
 
                 var msgs = new Array(node.outputs.length);
-                msgs[node.outputs.findIndex(function (output) { return output == msg.topic})] = msg;
+                msgs[node.outputs.findIndex(function (output) {
+                    return output == msg.topic
+                })] = msg;
 
                 node.send(msgs);
             });
 
         });
     }
-    RED.nodes.registerType("ecolect",EcolectNode);
+
+    RED.nodes.registerType("ecolect", EcolectNode);
 }
 
