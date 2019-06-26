@@ -83,12 +83,15 @@
                                 selectField.append($("<option></option>").val( valueTypes[d]).text(valueTypes[d]));
                             }
 
-                            var enumerationsEditor = $('<div/>',{style: 'height: 150px; min-height:50px;',
-                                class: 'node-text-editor'}).appendTo(row2);
+                             var enumerationsEditor = $('<textarea/>',{style: 'height: 150px; min-height:50px;',
+                                 class: 'node-text-editor'}).appendTo(row2);
+
+                            console.log(enumerationsEditor);
+
 
                             valueName[0].editor = RED.editor.createEditor({
-                                id: 'node-values-editor-'+i,
-                                mode: 'ace/mode/text'
+                                mode: 'ace/mode/text',
+                                id: 'node-input-enumeration-value',
                             });
 
 
@@ -205,7 +208,6 @@
                 var topic = topicField.val().trim();
                 var t = {name: topic};
                 t.phrases = topicField[0].editor.getValue();
-                topicField[0].editor.destroy();
                 delete topicField[0].editor;
 
                 var values = $(this).find(".node-input-values-container").editableList('items');
@@ -214,11 +216,11 @@
                     var name = $(this).find("input").val().trim();
                     var type = $(this).find("select").val();
                     var enumerations = [];
-                    var enumerationsEditor = $(this).find("input")[0].editor;
+                    var enumerationsEditor = $(this).find('.node-text-editor');
 
                     if (type == 'enumeration') {
-                        enumerations = enumerationsEditor.getValue().split('\n');
-
+                        console.log(enumerationsEditor);
+                        enumerations = enumerationsEditor[0].value.split('\n');
 
                         enumerations.forEach(function (text, index, arr) {
                             arr[index] = arr[index].trim();
@@ -229,7 +231,6 @@
                         });
                     }
 
-                    enumerationsEditor.destroy();
 
                     if (name != "") {
                         t.values.push({name: name, type: type, enumerations: enumerations});
@@ -239,6 +240,7 @@
 
                 });
 
+                console.log(t);
                 node.topics.push(t);
             });
 
