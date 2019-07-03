@@ -83,12 +83,14 @@
                                 selectField.append($("<option></option>").val( valueTypes[d]).text(valueTypes[d]));
                             }
 
-                            var enumerationsEditor = $('<div/>',{style: 'height: 150px; min-height:50px;',
-                                class: 'node-text-editor'}).appendTo(row2);
+                            var rand = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                             var enumerationsEditor = $('<div/>',{style: 'height: 150px; min-height:50px;',
+                                 class: 'node-text-editor', id: 'editor-'+rand }).appendTo(row2);
+
 
                             valueName[0].editor = RED.editor.createEditor({
-                                id: enumerationsEditor[0],
-                                mode: 'ace/mode/text'
+                                mode: 'ace/mode/text',
+                                id: enumerationsEditor[0].id,
                             });
 
 
@@ -103,15 +105,17 @@
                             });
 
                             valueName.val(opt.name);
-                            selectField.val(opt.type || valueTypes[0]);
+                           selectField.val(opt.type);
 
                             if (selectField.val() == 'enumeration') {
 
                                 var enumerationText = "";
-
                                 opt.enumerations.forEach(function (enumeration){
+                                    console.log(enumeration);
                                     enumerationText = enumerationText + enumeration + '\n';
                                 });
+
+                                console.log(valueName[0].editor);
 
                                 valueName[0].editor.setValue(
                                     enumerationText.slice(0,enumerationText.length-1), -1);
@@ -149,6 +153,8 @@
                     topicField.change();
 
                     valuesList.editableList('addItems',topic.values);
+
+
 
                     topicField[0].editor = RED.editor.createEditor({
                         id: 'node-input-phrases-editor-'+i,
@@ -205,7 +211,6 @@
                 var topic = topicField.val().trim();
                 var t = {name: topic};
                 t.phrases = topicField[0].editor.getValue();
-                topicField[0].editor.destroy();
                 delete topicField[0].editor;
 
                 var values = $(this).find(".node-input-values-container").editableList('items');
@@ -213,24 +218,21 @@
                 values.each(function(i){
                     var name = $(this).find("input").val().trim();
                     var type = $(this).find("select").val();
+
+
+
                     var enumerations = [];
                     var enumerationsEditor = $(this).find("input")[0].editor;
-
                     if (type == 'enumeration') {
                         enumerations = enumerationsEditor.getValue().split('\n');
-
-
                         enumerations.forEach(function (text, index, arr) {
                             arr[index] = arr[index].trim();
                         });
-
                         enumerations = enumerations.filter(function (text) {
                             return text.length > 0;
                         });
                     }
-
                     enumerationsEditor.destroy();
-
                     if (name != "") {
                         t.values.push({name: name, type: type, enumerations: enumerations});
                     }
